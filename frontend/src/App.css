@@ -1,0 +1,460 @@
+/* ===================================================== */
+/* THEME VARIABLES */
+/* ===================================================== */
+
+/* LIGHT THEME (default) */
+:root {
+  --bg-gradient: linear-gradient(135deg, #5b4bdb, #7c3aed, #ec4899);
+
+  --nav-bg: rgba(255, 255, 255, 0.25);
+  --card-bg: rgba(255, 255, 255, 0.22);
+
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.85);
+
+  --input-bg: #ffffff;
+  --input-text: #111827;
+  --input-placeholder: #6b7280;
+
+  --button-bg: linear-gradient(to right, #7c3aed, #4f46e5);
+  --button-text: #ffffff;
+
+  --border-glass: rgba(255, 255, 255, 0.35);
+}
+
+/* DARK THEME */
+[data-theme="dark"] {
+  --bg-gradient: linear-gradient(135deg, #020617, #0f172a, #1e293b);
+
+  --nav-bg: rgba(30, 41, 59, 0.75);
+  --card-bg: rgba(15, 23, 42, 0.85);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5f5;
+
+  --input-bg: #020617;
+  --input-text: #f8fafc;
+  --input-placeholder: #94a3b8;
+
+  --button-bg: linear-gradient(to right, #6366f1, #4338ca);
+  --button-text: #ffffff;
+
+  --border-glass: rgba(255, 255, 255, 0.15);
+}
+
+/* ===================================================== */
+/* GLOBAL RESET */
+/* ===================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg-gradient);
+  transition: background 0.4s ease;
+}
+
+/* ===================================================== */
+/* PAGE LAYOUT */
+/* ===================================================== */
+
+.page-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  padding: 24px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===================================================== */
+/* NAVBAR */
+/* ===================================================== */
+
+.navbar {
+  width: 100%;
+  max-width: 1000px;
+  padding: 14px 24px;
+  margin-bottom: 40px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: var(--nav-bg);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  border: 1px solid var(--border-glass);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo {
+  font-size: 1.4rem;
+}
+
+.nav-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+}
+
+/* Active link (React Router NavLink) */
+.nav-link.active {
+  color: var(--text-primary);
+  font-weight: 700;
+  border-bottom: 2px solid currentColor;
+  padding-bottom: 4px;
+}
+
+/* ===================================================== */
+/* THEME TOGGLE */
+/* ===================================================== */
+
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border-glass);
+  color: var(--text-primary);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.theme-toggle:hover {
+  transform: rotate(15deg);
+}
+
+/* ===================================================== */
+/* APP CARD */
+/* ===================================================== */
+
+.app-container {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px;
+
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border-radius: 28px;
+  border: 1px solid var(--border-glass);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+}
+
+/* ===================================================== */
+/* HEADER */
+/* ===================================================== */
+
+.header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.app-title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.app-subtitle {
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* ===================================================== */
+/* FORM */
+/* ===================================================== */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.url-input {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+
+  background: var(--input-bg);
+  color: var(--input-text);
+}
+
+.url-input::placeholder {
+  color: var(--input-placeholder);
+}
+
+.primary-btn {
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+
+  background: var(--button-bg);
+  color: var(--button-text);
+  font-weight: 600;
+  font-size: 0.95rem;
+
+  transition: opacity 0.25s ease, transform 0.15s ease;
+}
+
+.primary-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===================================================== */
+/* RESULT CARD */
+/* ===================================================== */
+
+.result-card {
+  margin-top: 28px;
+  padding: 18px;
+  border-radius: 18px;
+
+  background: var(--input-bg);
+  text-align: center;
+}
+
+.result-label {
+  font-size: 0.8rem;
+  color: var(--input-placeholder);
+  margin-bottom: 6px;
+}
+
+.short-url {
+  display: block;
+  font-weight: 600;
+  color: #6366f1;
+  word-break: break-all;
+  text-decoration: none;
+}
+
+.short-url:hover {
+  text-decoration: underline;
+}
+
+/* ===================================================== */
+/* QR + ACTIONS */
+/* ===================================================== */
+
+.qr-container {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.qr-container img {
+  width: 140px;
+  height: 140px;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.action-btn {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: #ffffff;
+  transition: transform 0.15s ease;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-green {
+  background: #10b981;
+}
+
+.btn-blue {
+  background: #4f46e5;
+}
+
+.btn-pink {
+  background: #ec4899;
+}
+/* ===================================================== */
+/* RESPONSIVE */
+/* ===================================================== */
+
+@media (max-width: 600px) {
+  .nav-link {
+    display: none;
+  }
+
+  .app-container {
+    padding: 24px;
+  }
+}
+
+/* ============================= */
+/* ANALYTICS PAGE */
+/* ============================= */
+
+.analytics-container {
+  width: 100%;
+  max-width: 1000px;
+  padding: 20px;
+  color: var(--text-primary);
+}
+
+.analytics-title {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.analytics-subtitle {
+  margin-top: 6px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+/* Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 20px;
+  border: 1px solid var(--border-glass);
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-top: 6px;
+}
+
+/* Table */
+.table-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 16px;
+  border: 1px solid var(--border-glass);
+  overflow-x: auto;
+}
+
+.analytics-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text-primary);
+}
+
+.analytics-table th,
+.analytics-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.analytics-table thead {
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.analytics-table tbody tr:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Status */
+.status {
+  font-weight: 600;
+}
+
+.status.active {
+  color: #22c55e;
+}
+
+.status.expired {
+  color: #ef4444;
+}
+
+.url-cell {
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-link {
+  color: #6366f1;
+  text-decoration: none;
+}
+
+.table-link:hover {
+  text-decoration: underline;
+}
