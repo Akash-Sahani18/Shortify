@@ -61,7 +61,7 @@ app.post("/api/short", async (req, res) => {
 app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
 
-  if (email !== "akash@shortify.com" || password !== "Mrsky#@#7890") {
+  if (email !== "abc@shortify.com" || password !== "Abc@123") {
     return res.status(401).json({ error: "Invalid credentials" });
   }
 
@@ -89,3 +89,4 @@ app.get("/:shortUrl", async (req, res) => {
 });
 
 app.listen(3000, () => console.log("Server is running on port 3000"));
+
