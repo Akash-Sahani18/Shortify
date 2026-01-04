@@ -12,14 +12,18 @@ import ProtectedRoute from "./components/ProtectedRoute";
 export default function App() {
   return (
     <div className="page-wrapper">
-      <nav className="navbar">
-  <span className="nav-title">Shortify</span>
-  <div>
-    <NavLink>Home</NavLink>
-    <NavLink>Analytics</NavLink>
-    <NavLink>About</NavLink>
+     <nav className="navbar">
+  <div className="nav-left">
+    <span className="nav-title">Shortify</span>
+  </div>
+
+  <div className="nav-right">
+    <NavLink to="/" className="nav-link">Home</NavLink>
+    <NavLink to="/analytics" className="nav-link">Analytics</NavLink>
+    <NavLink to="/about" className="nav-link">About</NavLink>
   </div>
 </nav>
+
 
       <Routes>
         <Route path="/" element={<Home />} />
