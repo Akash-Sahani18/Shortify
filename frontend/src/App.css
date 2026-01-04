@@ -343,12 +343,18 @@ body {
 /* ===================================================== */
 
 @media (max-width: 600px) {
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   .nav-link {
     display: none;
   }
 
-  .app-container {
-    padding: 24px;
+  .theme-toggle {
+    display: flex; 
   }
 }
 
@@ -457,4 +463,5 @@ body {
 
 .table-link:hover {
   text-decoration: underline;
+
 }
