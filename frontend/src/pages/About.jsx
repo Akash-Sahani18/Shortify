@@ -1,3 +1,4 @@
+import React from "react";
 export default function About() {
   return (
     <div className="analytics-container">
@@ -32,4 +33,5 @@ export default function About() {
     </div>
   );
 }
+
 
