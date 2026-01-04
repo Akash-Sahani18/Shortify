@@ -4,19 +4,19 @@ import { Routes, Route, NavLink } from "react-router-dom";
 import "./App.css";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/login";
-import Home from "./pages/Home";
+import Home from "./pages/home";
 import Analytics from "./pages/analytics";
 import About from "./pages/about";
 
 export default function App() {
-  /* -------------------- STATE -------------------- */
+
   const [originalUrl, setOriginalUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [qrCode, setQrCode] = useState("");
   const [theme, setTheme] = useState("light");
   const [loading, setLoading] = useState(false);
 
-  /* -------------------- THEME -------------------- */
+ 
   const toggleTheme = () => {
     const t = theme === "light" ? "dark" : "light";
     setTheme(t);
@@ -29,7 +29,7 @@ export default function App() {
     setTheme(saved);
     document.documentElement.setAttribute("data-theme", saved);
   }, []);
-  /* -------------------- HELPERS -------------------- */
+
   const isValidUrl = (url) => {
     try {
       new URL(url);
