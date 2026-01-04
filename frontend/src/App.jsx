@@ -12,7 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 export default function App() {
   return (
     <div className="page-wrapper">
-     <nav className="navbar">
+    <nav className="navbar">
   <div className="nav-left">
     <span className="nav-title">Shortify</span>
   </div>
@@ -22,9 +22,11 @@ export default function App() {
     <NavLink to="/analytics" className="nav-link">Analytics</NavLink>
     <NavLink to="/about" className="nav-link">About</NavLink>
   </div>
+
+  <button className="theme-toggle" onClick={toggleTheme}>
+    {theme === "light" ? "🌙" : "☀️"}
+  </button>
 </nav>
-
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
