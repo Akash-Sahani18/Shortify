@@ -1,3 +1,7 @@
 export default function Home({ children }) {
-  return children;
+  return (
+    <div className="home-page">
+      {children}
+    </div>
+  );
 }
