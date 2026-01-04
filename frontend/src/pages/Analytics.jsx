@@ -7,7 +7,10 @@ export default function Analytics() {
   useEffect(() => {
     api.get("/analytics")
       .then(res => setData(res.data))
-      .catch(console.error);
+      .catch(err => {
+        console.error(err);
+        alert("Failed to load analytics");
+      });
   }, []);
 
   if (!data) {
@@ -40,51 +43,46 @@ export default function Analytics() {
       <div className="table-card">
         <table className="analytics-table">
           <thead>
-  <tr>
-    <th>Original URL</th>
-    <th>Short URL</th>
-    <th>Clicks</th>
-    <th>Created</th>
-  </tr>
-</thead>
+            <tr>
+              <th>Original URL</th>
+              <th>Short URL</th>
+              <th>Clicks</th>
+              <th>Created</th>
+            </tr>
+          </thead>
 
           <tbody>
-  {data.urls.map((url) => (
-    <tr key={url._id}>
-      <td className="url-cell">
-        <a
-          href={url.originalUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="table-link"
-        >
-          {url.originalUrl}
-        </a>
-      </td>
+            {data.urls.map((url) => (
+              <tr key={url._id}>
+                <td className="url-cell">
+                  <a
+                    href={url.originalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="table-link"
+                  >
+                    {url.originalUrl}
+                  </a>
+                </td>
 
-      <td className="url-cell">
-  <a
-  href={`${import.meta.env.VITE_API_BASE_URL}/${url.shortUrl}`}
+                <td className="url-cell">
+                  <a
+                    href={`${import.meta.env.VITE_API_BASE_URL}/${url.shortUrl}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="table-link"
+                  >
+                    {url.shortUrl}
+                  </a>
+                </td>
 
-    target="_blank"
-    rel="noopener noreferrer"
-    className="table-link"
-  >
-    {url.shortUrl}
-  </a>
-</td>
-
-
-      <td>{url.click}</td>
-
-      <td>{new Date(url.createdAt).toLocaleDateString()}</td>
-    </tr>
-  ))}
-</tbody>
-
+                <td>{url.click}</td>
+                <td>{new Date(url.createdAt).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>
   );
 }
-
