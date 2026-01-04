@@ -13,13 +13,13 @@ export default function App() {
   return (
     <div className="page-wrapper">
       <nav className="navbar">
-        <span className="nav-title">Shortify</span>
-        <div>
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/analytics">Analytics</NavLink>
-          <NavLink to="/about">About</NavLink>
-        </div>
-      </nav>
+  <span className="nav-title">Shortify</span>
+  <div>
+    <NavLink>Home</NavLink>
+    <NavLink>Analytics</NavLink>
+    <NavLink>About</NavLink>
+  </div>
+</nav>
 
       <Routes>
         <Route path="/" element={<Home />} />
