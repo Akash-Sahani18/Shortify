@@ -9,6 +9,20 @@ import About from "./pages/About";
 import Analytics from "./pages/Analytics";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+import { useEffect } from "react";
+
+useEffect(() => {
+  const saved = localStorage.getItem("theme") || "light";
+  document.documentElement.setAttribute("data-theme", saved);
+}, []);
+const toggleTheme = () => {
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+};
+
+
 export default function App() {
   return (
     <div className="page-wrapper">
