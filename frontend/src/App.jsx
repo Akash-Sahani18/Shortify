@@ -1,22 +1,22 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { Routes, Route, NavLink } from "react-router-dom";
 import "./App.css";
+
+import api from "./services/api";
 import ProtectedRoute from "./components/ProtectedRoute";
-import Login from "./pages/login";
-import Home from "./pages/home";
-import Analytics from "./pages/analytics";
-import About from "./pages/about";
+
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import Analytics from "./pages/Analytics";
+import About from "./pages/About";
 
 export default function App() {
-
   const [originalUrl, setOriginalUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [qrCode, setQrCode] = useState("");
   const [theme, setTheme] = useState("light");
   const [loading, setLoading] = useState(false);
 
- 
   const toggleTheme = () => {
     const t = theme === "light" ? "dark" : "light";
     setTheme(t);
@@ -30,6 +30,7 @@ export default function App() {
     document.documentElement.setAttribute("data-theme", saved);
   }, []);
 
+
   const isValidUrl = (url) => {
     try {
       new URL(url);
@@ -42,7 +43,7 @@ export default function App() {
   const downloadQR = () => {
     const link = document.createElement("a");
     link.href = qrCode;
-    link.download = "qr-code.jpeg";
+    link.download = "qr-code.png";
     link.click();
   };
 
@@ -63,6 +64,7 @@ export default function App() {
     }
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -73,14 +75,12 @@ export default function App() {
 
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3000/api/short", {
-        originalUrl,
-      });
-
+      const res = await api.post("/short", { originalUrl });
       setShortUrl(res.data.shortUrl);
       setQrCode(res.data.qrCode);
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      alert("Failed to shorten URL");
     } finally {
       setLoading(false);
     }
@@ -89,10 +89,8 @@ export default function App() {
   return (
     <div className="page-wrapper">
 
-      {/* NAVBAR */}
       <nav className="navbar">
         <div className="nav-left">
-          <span className="nav-logo"></span>
           <span className="nav-title">Shortify</span>
         </div>
 
@@ -101,30 +99,23 @@ export default function App() {
           <NavLink to="/analytics" className="nav-link">Analytics</NavLink>
           <NavLink to="/about" className="nav-link">About</NavLink>
 
-          <button
-            type="button"
-            className="theme-toggle"
-            onClick={toggleTheme}
-          >
+          <button className="theme-toggle" onClick={toggleTheme}>
             {theme === "light" ? "🌙" : "☀️"}
           </button>
         </div>
       </nav>
 
       <Routes>
-        \
         <Route
           path="/"
           element={
             <Home>
               <div className="main-content">
                 <div className="app-container">
-                  <div className="header">
-                    <h1 className="app-title">Shortify</h1>
-                    <p className="app-subtitle">
-                      Shorten links. Share smarter. Track better.
-                    </p>
-                  </div>
+                  <h1 className="app-title">Shortify</h1>
+                  <p className="app-subtitle">
+                    Shorten links. Share smarter. Track better.
+                  </p>
 
                   <form onSubmit={handleSubmit} className="form-group">
                     <input
@@ -147,39 +138,18 @@ export default function App() {
 
                   {shortUrl && (
                     <div className="result-card">
-                      <p className="result-label">Your short link</p>
-                      <a
-                        className="short-url"
-                        href={shortUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
+                      <p>Your short link</p>
+                      <a href={shortUrl} target="_blank" rel="noreferrer">
                         {shortUrl}
                       </a>
 
                       {qrCode && (
                         <div className="qr-container">
-                          <img src={qrCode} alt="QR" />
-
+                          <img src={qrCode} alt="QR Code" />
                           <div className="action-buttons">
-                            <button
-                              className="action-btn btn-green"
-                              onClick={downloadQR}
-                            >
-                              Download QR
-                            </button>
-                            <button
-                              className="action-btn btn-blue"
-                              onClick={copyToClipboard}
-                            >
-                              Copy Link
-                            </button>
-                            <button
-                              className="action-btn btn-pink"
-                              onClick={shareUrl}
-                            >
-                              Share
-                            </button>
+                            <button onClick={downloadQR}>Download QR</button>
+                            <button onClick={copyToClipboard}>Copy</button>
+                            <button onClick={shareUrl}>Share</button>
                           </div>
                         </div>
                       )}
@@ -190,8 +160,8 @@ export default function App() {
             </Home>
           }
         />
-        <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/about" element={<About />} />
 
         <Route
           path="/analytics"
