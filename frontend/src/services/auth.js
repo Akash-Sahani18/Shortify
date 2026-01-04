@@ -1,5 +1,4 @@
-// frontend/src/services/auth.js
-
+import React from "react";
 export const login = (token) => {
   localStorage.setItem("token", token);
 };
@@ -11,3 +10,4 @@ export const logout = () => {
 export const isAuthenticated = () => {
   return !!localStorage.getItem("token");
 };
+
