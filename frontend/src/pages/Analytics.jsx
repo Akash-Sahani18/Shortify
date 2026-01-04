@@ -64,7 +64,8 @@ export default function Analytics() {
 
       <td className="url-cell">
   <a
-    href={`http://localhost:3000/${url.shortUrl}`}
+  href={`${import.meta.env.VITE_API_BASE_URL}/${url.shortUrl}`}
+
     target="_blank"
     rel="noopener noreferrer"
     className="table-link"
@@ -86,3 +87,4 @@ export default function Analytics() {
     </div>
   );
 }
+
