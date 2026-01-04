@@ -5,10 +5,10 @@ import "./App.css";
 import api from "./services/api";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-import Login from "./pages/login";
-import Home from "./pages/home";
-import Analytics from "./pages/analytics";
-import About from "./pages/about";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import Analytics from "./pages/Analytics";
+import About from "./pages/About";
 
 export default function App() {
   const [originalUrl, setOriginalUrl] = useState("");
