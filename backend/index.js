@@ -14,25 +14,25 @@ const app = express();
 
 app.use(cors({
   origin: [
-    "https://www.shrtfy.cloud",
-    "https://www.shrtfy.cloud/",
-    "https://shrtfy.cloud"
+    "https://shrtfy.cloud",
+    "https://www.shrtfy.cloud"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true
 }));
+
 app.use(express.json());
 
-// DB connection
 mongoose
-  .connect(process.env.DATABASE_URL)
-  .then(() => console.log("DB connected Successfully"))
-  .catch((err) => console.log("Failed to connect database", err));
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => {
+    console.error("MongoDB connection failed:", err);
+    process.exit(1);
+  });
 
-// REGISTER ROUTES
 app.use("/api", analyticsRoutes);
 
-// CREATE SHORT URL
 app.post("/api/short", async (req, res) => {
   try {
     const { originalUrl } = req.body;
@@ -41,7 +41,6 @@ app.post("/api/short", async (req, res) => {
       return res.status(400).json({ error: "Invalid originalUrl" });
     }
 
-    // generate unique short code
     let shortCode;
     let exists = true;
 
@@ -50,23 +49,28 @@ app.post("/api/short", async (req, res) => {
       exists = await Url.findOne({ shortUrl: shortCode });
     }
 
-    const fullShortUrl = `https://localhost:3000/${shortCode}`;
+    const fullShortUrl = `${process.env.BASE_URL}/${shortCode}`;
+
     const qrCode = await QRCode.toDataURL(fullShortUrl);
 
     await Url.create({
       originalUrl,
       shortUrl: shortCode,
+      click: 0
     });
 
     res.status(201).json({
       shortUrl: fullShortUrl,
-      qrCode,
+      qrCode
     });
+
   } catch (error) {
-    console.error("CREATE SHORT ERROR:", error);
-    res.status(500).json({ error: "Server error" });
+    console.error(" CREATE SHORT ERROR:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
 app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -76,14 +80,13 @@ app.post("/api/login", (req, res) => {
 
   const token = jwt.sign(
     { email },
-    process.env.JWT_SECRET || "secret123",
+    process.env.JWT_SECRET,
     { expiresIn: "1h" }
   );
 
   res.json({ token });
 });
 
-// REDIRECT + CLICK COUNT
 app.get("/:shortUrl", async (req, res) => {
   try {
     const url = await Url.findOne({ shortUrl: req.params.shortUrl });
@@ -91,12 +94,12 @@ app.get("/:shortUrl", async (req, res) => {
 
     url.click++;
     await url.save();
+
     res.redirect(url.originalUrl);
   } catch (error) {
     res.status(500).json({ error: "Server error" });
   }
 });
 
-app.listen(3000, () => console.log("Server is running on port 3000"));
-
-
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
