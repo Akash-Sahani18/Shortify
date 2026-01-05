@@ -14,8 +14,8 @@ const app = express();
 
 app.use(cors({
   origin: [
-    "https://shrtfy.cloud",
-    "https://www.shrtfy.cloud"
+    "https://www.shrtfy.cloud",
+    "https://shrtfy.cloud"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true
@@ -23,6 +23,7 @@ app.use(cors({
 
 app.use(express.json());
 
+// MongoDB
 mongoose
   .connect(process.env.DATABASE_URL)
   .then(() => console.log("MongoDB Connected"))
@@ -31,8 +32,10 @@ mongoose
     process.exit(1);
   });
 
+// Routes
 app.use("/api", analyticsRoutes);
 
+// Create short URL
 app.post("/api/short", async (req, res) => {
   try {
     const { originalUrl } = req.body;
@@ -42,15 +45,11 @@ app.post("/api/short", async (req, res) => {
     }
 
     let shortCode;
-    let exists = true;
-
-    while (exists) {
+    do {
       shortCode = nanoid(6);
-      exists = await Url.findOne({ shortUrl: shortCode });
-    }
+    } while (await Url.findOne({ shortUrl: shortCode }));
 
     const fullShortUrl = `${process.env.BASE_URL}/${shortCode}`;
-
     const qrCode = await QRCode.toDataURL(fullShortUrl);
 
     await Url.create({
@@ -59,18 +58,15 @@ app.post("/api/short", async (req, res) => {
       click: 0
     });
 
-    res.status(201).json({
-      shortUrl: fullShortUrl,
-      qrCode
-    });
+    res.status(201).json({ shortUrl: fullShortUrl, qrCode });
 
   } catch (error) {
-    console.error(" CREATE SHORT ERROR:", error);
+    console.error("CREATE SHORT ERROR:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-
+// Login
 app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -87,6 +83,7 @@ app.post("/api/login", (req, res) => {
   res.json({ token });
 });
 
+// Redirect
 app.get("/:shortUrl", async (req, res) => {
   try {
     const url = await Url.findOne({ shortUrl: req.params.shortUrl });
@@ -101,7 +98,8 @@ app.get("/:shortUrl", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
+// Start server (ONLY ONCE)
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
