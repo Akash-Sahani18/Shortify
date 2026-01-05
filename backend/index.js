@@ -11,7 +11,16 @@ const analyticsRoutes = require("./routes/analytics");
 const Url = require("./models/Url");
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: [
+    "https://www.shrtfy.cloud",
+    "https://www.shrtfy.cloud/",
+    "https://shrtfy.cloud"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true
+}));
 app.use(express.json());
 
 // DB connection
@@ -89,4 +98,5 @@ app.get("/:shortUrl", async (req, res) => {
 });
 
 app.listen(3000, () => console.log("Server is running on port 3000"));
+
 
