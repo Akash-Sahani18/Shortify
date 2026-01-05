@@ -24,7 +24,7 @@ app.use(cors({
 app.use(express.json());
 
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.DATABASE_URL)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => {
     console.error("MongoDB connection failed:", err);
@@ -103,3 +103,4 @@ app.get("/:shortUrl", async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
