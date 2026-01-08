@@ -14,7 +14,6 @@ It supports:
 ## 🚀 Live Demo
 
 - **LIVE URL:** [https://shrtfy.com ](https://www.shrtfy.cloud/)
-- **Frontend:** [https://shrtfy.app](https://shortify-git-main-akash-sahanis-projects.vercel.app/)
 
 ---
 
