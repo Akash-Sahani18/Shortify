@@ -84,7 +84,7 @@ app.post("/api/login", (req, res) => {
 });
 
 // Redirect
-app.get("/r/:shortUrl", async (req, res) => {
+app.get("/:shortUrl", async (req, res) => {
   try {
     const url = await Url.findOne({ shortUrl: req.params.shortUrl });
     if (!url) {
