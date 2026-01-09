@@ -84,22 +84,27 @@ app.post("/api/login", (req, res) => {
 });
 
 // Redirect
-app.get("/:shortUrl", async (req, res) => {
+app.get("/r/:shortUrl", async (req, res) => {
   try {
     const url = await Url.findOne({ shortUrl: req.params.shortUrl });
-    if (!url) return res.status(404).json({ error: "URL not found" });
+    if (!url) {
+      return res.status(404).json({ error: "URL not found" });
+    }
 
-    url.click++;
+    url.click += 1;
     await url.save();
 
-    res.redirect(url.originalUrl);
+    return res.redirect(302, url.originalUrl);
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    console.error("REDIRECT ERROR:", error);
+    return res.status(500).json({ error: "Server error" });
   }
 });
+
 
 // Start server (ONLY ONCE)
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
