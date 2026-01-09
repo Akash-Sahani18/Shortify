@@ -76,7 +76,7 @@ app.post("/api/login", (req, res) => {
 
   const token = jwt.sign(
     { email },
-    process.env.JWT_SECRET,
+    process.env.JWT,
     { expiresIn: "1h" }
   );
 
@@ -109,6 +109,7 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 
 
 
