@@ -14,7 +14,7 @@ const app = express();
 
 app.use(cors({
   origin: [
-    "https://www.shrtfy.cloud",
+    "https://s.shrtfy.cloud",
     "https://shrtfy.cloud"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -109,5 +109,6 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 
 
