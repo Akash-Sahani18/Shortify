@@ -84,9 +84,11 @@ app.post("/api/login", (req, res) => {
 });
 
 // Redirect
-app.get("/:shortUrl", async (req, res) => {
+app.get("/r/:shortUrl", async (req, res) => {
   try {
-    const url = await Url.findOne({ shortUrl: req.params.shortUrl });
+    const { shortUrl } = req.params;
+
+    const url = await Url.findOne({ shortUrl });
     if (!url) {
       return res.status(404).json({ error: "URL not found" });
     }
@@ -107,4 +109,5 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 
