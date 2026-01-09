@@ -49,7 +49,7 @@ app.post("/api/short", async (req, res) => {
       shortCode = nanoid(6);
     } while (await Url.findOne({ shortUrl: shortCode }));
 
-    const fullShortUrl = `${process.env.BASE_URL}/${shortCode}`;
+    const fullShortUrl = `${process.env.BASE_URL}/r/${shortCode}`;
     const qrCode = await QRCode.toDataURL(fullShortUrl);
 
     await Url.create({
@@ -109,6 +109,7 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 
 
 
