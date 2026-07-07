@@ -1,5 +1,4 @@
-# 🔗 Shortify – URL Shortener Backend (MERN)
-
+# 🔗 Shortify – URL Shortener Backend
 Shortify is a production-ready **URL shortening service** built using **Node.js, Express, MongoDB**, and deployed on **AWS EC2** with **Nginx, PM2, custom domain, and HTTPS**.
 
 It supports:
