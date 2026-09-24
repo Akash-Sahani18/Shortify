@@ -7,6 +7,10 @@ Shortify allows users to create short URLs, manage their links, monitor
 click activity, generate QR codes, control link availability, and
 securely manage their accounts from a single workspace.
 
+# Shortify - URL Shortener
+
+🔗 **Live Demo:** https://shrtfy.cloud
+
 ------------------------------------------------------------------------
 
 ## What Problem Does Shortify Solve?
