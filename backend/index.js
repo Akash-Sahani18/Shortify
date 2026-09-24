@@ -538,9 +538,43 @@ app.delete("/api/short/:id", async (req, res) => {
   }
 });
 
-app.get("/:shortCode", async (req, res) => {
-  let client;
+async function recordClickAnalytics(
+  shortUrlId,
+  userAgent,
+  referrer
+) {
+  const pool = getPool();
 
+  try {
+    await pool.query(
+      `UPDATE short_urls
+       SET click_count = click_count + 1
+       WHERE id = $1`,
+      [shortUrlId]
+    );
+
+    await pool.query(
+      `INSERT INTO clicks (
+         short_url_id,
+         user_agent,
+         referrer
+       )
+       VALUES ($1, $2, $3)`,
+      [
+        shortUrlId,
+        userAgent,
+        referrer,
+      ]
+    );
+  } catch (error) {
+    console.error(
+      "CLICK ANALYTICS ERROR:",
+      error
+    );
+  }
+}
+
+app.get("/:shortCode", async (req, res) => {
   try {
     const { shortCode } = req.params;
     const cacheKey = `url:${shortCode}`;
@@ -572,9 +606,7 @@ app.get("/:shortCode", async (req, res) => {
     }
 
     if (!cached) {
-      client = await getPool().connect();
-
-      const result = await client.query(
+      const result = await getPool().query(
         `SELECT
            id,
            original_url,
@@ -648,46 +680,24 @@ app.get("/:shortCode", async (req, res) => {
       );
     }
 
-    if (!client) {
-      client = await getPool().connect();
-    }
-
-    await client.query("BEGIN");
-
-    await client.query(
-      `UPDATE short_urls
-       SET click_count = click_count + 1
-       WHERE id = $1`,
-      [shortUrlId]
-    );
-
-    await client.query(
-      `INSERT INTO clicks (
-         short_url_id,
-         user_agent,
-         referrer
-       )
-       VALUES ($1, $2, $3)`,
-      [
+    setImmediate(() => {
+      recordClickAnalytics(
         shortUrlId,
         req.get("user-agent") || null,
-        req.get("referer") || null,
-      ]
-    );
-
-    await client.query("COMMIT");
+        req.get("referer") || null
+      ).catch((error) => {
+        console.error(
+          "ASYNC CLICK ANALYTICS ERROR:",
+          error
+        );
+      });
+    });
 
     return res.redirect(
       302,
       destination
     );
   } catch (error) {
-    if (client) {
-      try {
-        await client.query("ROLLBACK");
-      } catch {}
-    }
-
     console.error(
       "REDIRECT ERROR:",
       error
@@ -696,10 +706,6 @@ app.get("/:shortCode", async (req, res) => {
     return res.status(500).send(
       "Failed to redirect"
     );
-  } finally {
-    if (client) {
-      client.release();
-    }
   }
 });
 

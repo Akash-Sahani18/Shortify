@@ -3,38 +3,49 @@ services:
   postgres:
     image: postgres:18
     container_name: shortify-postgres
+
     environment:
       POSTGRES_USER: shortify
       POSTGRES_PASSWORD: shortify_dev_password
       POSTGRES_DB: shortify
+
     volumes:
       - postgres_data:/var/lib/postgresql
       - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U shortify -d shortify"]
       interval: 5s
       timeout: 5s
       retries: 10
+
     restart: unless-stopped
+
 
   redis:
     image: redis:7-alpine
     container_name: shortify-redis
+
     restart: unless-stopped
+
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+
     container_name: shortify-backend
+
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_started
+
     environment:
       PORT: 3000
-      BASE_URL: http://localhost:3000
+
+      BASE_URL: http://localhost:5173
 
       DATABASE_URL: postgresql://shortify:shortify_dev_password@postgres:5432/shortify
 
@@ -47,23 +58,32 @@ services:
       SMTP_USER: ${SMTP_USER}
       SMTP_PASSWORD: ${SMTP_PASSWORD}
       SMTP_FROM: ${SMTP_FROM}
-    ports:
-      - "3000:3000"
+
+    expose:
+      - "3000"
+
     restart: unless-stopped
+
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+
       args:
-        VITE_API_BASE_URL: http://localhost:3000/api
-        VITE_APP_BASE_URL: http://localhost:3000
+        VITE_API_BASE_URL: /api
+        VITE_APP_BASE_URL: http://localhost:5173
+
     container_name: shortify-frontend
+
     depends_on:
       - backend
+
     ports:
       - "5173:80"
+
     restart: unless-stopped
+
 
 volumes:
   postgres_data:
